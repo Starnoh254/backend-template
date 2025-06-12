@@ -192,8 +192,7 @@ Want to use PostgreSQL instead of MySQL?
 Run:
 
 ```bash
-npx prisma db push
-npx prisma generate
+npx prisma migrate dev --name <name>
 ```
 
 ---
