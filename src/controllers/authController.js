@@ -2,7 +2,7 @@ const authService = require('../services/authService');
 
 class authController {
   // Register a new user
-  static async register (req, res) {
+  static async register(req, res) {
     const { email, password } = req.body;
     try {
       const user = await authService.registerUser(email, password);
@@ -20,9 +20,23 @@ class authController {
     const { email, password } = req.body;
     try {
       const result = await authService.loginUser(email, password);
-      res.status(200).json({status : "success", result});
+      res.status(200).json({ status: "success", result });
     } catch (err) {
       if (err.message === 'Invalid credentials') {
+        return res.status(400).json({ message: err.message });
+      }
+      res.status(500).json({ message: 'Server error', error: err.message });
+    }
+  }
+
+  // Register a new admin
+  static async registerAdmin(req, res) {
+    const { email, password } = req.body;
+    try {
+      const admin = await authService.registerAdmin(email, password);
+      res.status(201).json({ message: 'Admin registered', user: admin });
+    } catch (err) {
+      if (err.message === 'User already exists') {
         return res.status(400).json({ message: err.message });
       }
       res.status(500).json({ message: 'Server error', error: err.message });
